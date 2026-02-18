@@ -1,4 +1,5 @@
 import React from 'react';
+import { AutoFillService } from '../../../../services/OmniLink/AutoFillService';
 
 export function LoopDiagramSVG({ record }) {
   const cableSpec = AutoFillService.getCableSpec(record.sig);

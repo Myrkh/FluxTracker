@@ -1,4 +1,5 @@
 import React from 'react';
+import { SIG_CABLE_MAP } from '../../../../constants/OmniLink';
 
 export function JBDiagramSVG({ jbTag, records }) {
   const rowH = 28;

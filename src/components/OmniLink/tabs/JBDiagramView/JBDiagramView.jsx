@@ -5,6 +5,7 @@ import { useApp } from '../../../../context/OmniLink';
 import { EmptyState } from '../../common';
 import { customSelectStyles } from '../../../../constants/OmniLink';
 import { JBDiagramSVG } from './JBDiagramSVG';
+import { FormField } from '../../common/FormField';
 
 export function JBDiagramView() {
   const { records } = useApp();

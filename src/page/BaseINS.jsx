@@ -10,6 +10,7 @@ import { useReferenceData, useRecords, useNotification } from '../hooks/OmniLink
 import { NotificationToast } from '../components/OmniLink/common';
 import { TABS } from '../constants/OmniLink';
 import ImportViewComponent from '../components/OmniLink/ImportView';
+import { CableBookView } from '../components/OmniLink/tabs/CableBookView';
 
 // Tabs
 import { 
@@ -138,7 +139,7 @@ export default function BaseINSApp() {
           {activeTab === 'dashboard' && <DashboardView />}
           {activeTab === 'loop' && <LoopDiagramView />}
           {activeTab === 'jb' && <JBDiagramView />}
-          {activeTab === 'cables' && <CableScheduleView />}
+          {activeTab === 'cables' && <CableBookView />}
         </main>
 
         {/* ── FOOTER ── */}
