@@ -12,6 +12,9 @@ export function useCableBooks() {
   const [localRecords, setLocalRecords] = useState([]);
   const [multiRecords, setMultiRecords] = useState([]);
   const [cableTypes, setCableTypes] = useState([]);
+  const [cableTypesTerrain, setCableTypesTerrain] = useState([]);
+  const [cableTypesLocal, setCableTypesLocal] = useState([]);
+  const [cableTypesMulti, setCableTypesMulti] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // ─────────────────────────────────────────────────────────
@@ -30,7 +33,12 @@ export function useCableBooks() {
       setUnitRecords(unitRes.data || []);
       setLocalRecords(localRes.data || []);
       setMultiRecords(multiRes.data || []);
-      setCableTypes(typesRes.data || []);
+      
+      const types = typesRes.data || [];
+      setCableTypes(types);
+      setCableTypesTerrain(types.filter(t => t.application === 'TERRAIN' || t.application === 'BOTH'));
+      setCableTypesLocal(types.filter(t => t.application === 'LOCAL_TECH' || t.application === 'BOTH'));
+      setCableTypesMulti(types.filter(t => t.application === 'MULTICONDUCTEUR' || t.application === 'BOTH'));
     } catch (err) {
       console.error('Error loading cable books:', err);
     } finally {
@@ -142,6 +150,9 @@ export function useCableBooks() {
     localRecords,
     multiRecords,
     cableTypes,
+    cableTypesTerrain,
+    cableTypesLocal,
+    cableTypesMulti,
     loading,
 
     // Actions

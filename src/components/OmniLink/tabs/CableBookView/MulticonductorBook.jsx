@@ -7,10 +7,12 @@ import React, { useState } from 'react';
 import { Download, Plus, Trash2, Edit3, X } from 'lucide-react';
 import { useApp } from '../../../../context/OmniLink';
 import { EmptyState } from '../../common';
-import { STANDARD_CABLE_TYPES } from '../../../../constants/OmniLink/cableTypes';
 import { CableBookExportService } from '../../../../services/OmniLink/CableBookExportService';
 
-export function MulticonductorBook({ multiRecords, onAdd, onUpdate, onDelete }) {
+/**
+ * @param {object[]} cableTypes - Types câbles MULTICONDUCTEUR depuis ref_cable_types (Supabase)
+ */
+export function MulticonductorBook({ multiRecords, cableTypes = [], onAdd, onUpdate, onDelete }) {
   const { notify } = useApp();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
@@ -22,8 +24,7 @@ export function MulticonductorBook({ multiRecords, onAdd, onUpdate, onDelete }) 
     obs: ''
   });
 
-  // Options multiconducteurs
-  const multiOptions = STANDARD_CABLE_TYPES.MULTICONDUCTOR;
+  // Options depuis Supabase (application=MULTICONDUCTEUR)
 
   const resetForm = () => {
     setForm({
@@ -196,8 +197,10 @@ export function MulticonductorBook({ multiRecords, onAdd, onUpdate, onDelete }) 
                   onChange={(e) => setForm({ ...form, multiconductor_type: e.target.value })}
                   className="w-full px-4 py-2.5 text-sm border-2 border-gray-200 rounded-lg focus:border-[#00375A] focus:ring-4 focus:ring-[#00375A]/10 outline-none">
                   <option value="">Sélectionner...</option>
-                  {multiOptions.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  {cableTypes.map(opt => (
+                    <option key={opt.code} value={opt.code}>
+                      {opt.description ? `${opt.code} — ${opt.description}` : opt.code}
+                    </option>
                   ))}
                 </select>
               </div>

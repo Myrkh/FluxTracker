@@ -24,7 +24,9 @@ export function CableBookView() {
     unitRecords,
     localRecords,
     multiRecords,
-    cableTypes,
+    cableTypesTerrain,
+    cableTypesLocal,
+    cableTypesMulti,
     loading,
     
     // Unit actions
@@ -113,7 +115,7 @@ export function CableBookView() {
           {activeTab === 'unit' && (
             <UnitCableBook
               unitRecords={unitRecords}
-              cableBooks={cableBooks}
+              cableTypes={cableTypesTerrain}
               onUpdate={updateUnitRecord}
               onDelete={deleteUnitRecord}
               onBulkAdd={bulkAddUnit}
@@ -123,7 +125,7 @@ export function CableBookView() {
           {activeTab === 'local' && (
             <LocalCableBook
               localRecords={localRecords}
-              cableBooks={cableBooks}
+              cableTypes={cableTypesLocal}
               onUpdate={updateLocalRecord}
               onDelete={deleteLocalRecord}
               onBulkAdd={bulkAddLocal}
@@ -133,6 +135,7 @@ export function CableBookView() {
           {activeTab === 'multi' && (
             <MulticonductorBook
               multiRecords={multiRecords}
+              cableTypes={cableTypesMulti}
               onAdd={addMultiRecord}
               onUpdate={updateMultiRecord}
               onDelete={deleteMultiRecord}

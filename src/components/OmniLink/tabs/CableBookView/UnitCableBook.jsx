@@ -9,26 +9,31 @@ import { Download, Plus, Trash2, Save, X } from 'lucide-react';
 import { useApp } from '../../../../context/OmniLink/AppContext';
 import { EmptyState } from '../../common/EmptyState';
 import { customSelectStyles } from '../../../../constants/OmniLink';
-import { STANDARD_CABLE_TYPES } from '../../../../constants/OmniLink/cableTypes';
 import { CableBookExportService } from '../../../../services/OmniLink/CableBookExportService';
 
-export function UnitCableBook({ unitRecords, cableBooks, onUpdate, onDelete, onBulkAdd }) {
+/**
+ * @param {object[]} cableTypes - Types câbles TERRAIN depuis ref_cable_types (Supabase)
+ */
+export function UnitCableBook({ unitRecords, cableTypes = [], onUpdate, onDelete, onBulkAdd }) {
   const { records, notify } = useApp();
   const [selectedInsRecords, setSelectedInsRecords] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({});
 
-  // Liste des instruments disponibles (pas encore dans le carnet)
+  // Instruments disponibles (pas encore dans le carnet)
   const availableRecords = useMemo(() => {
     const existingIds = new Set(unitRecords.map(u => u.ins_record_id));
     return records.filter(r => !existingIds.has(r.id) && r.tag);
   }, [records, unitRecords]);
 
-  // Options pour le dropdown de câbles
-  const cableOptions = STANDARD_CABLE_TYPES.TERRAIN.map(c => ({
-    value: c.value,
-    label: c.label
-  }));
+  // Options câbles depuis Supabase — format react-select
+  const cableOptions = useMemo(() =>
+    cableTypes.map(c => ({
+      value: c.code,
+      label: c.description ? `${c.code} — ${c.description}` : c.code,
+    })),
+    [cableTypes]
+  );
 
   // Ajouter les instruments sélectionnés
   const handleBulkAdd = async () => {
@@ -167,12 +172,13 @@ export function UnitCableBook({ unitRecords, cableBooks, onUpdate, onDelete, onB
                     <td className="px-4 py-3">
                       {isEditing ? (
                         <Select
-                          value={cableOptions.find(c => c.value === editForm.cable_type)}
-                          onChange={(opt) => setEditForm({ ...editForm, cable_type: opt?.value })}
+                          value={cableOptions.find(c => c.value === editForm.cable_type) || null}
+                          onChange={(opt) => setEditForm({ ...editForm, cable_type: opt?.value || null })}
                           options={cableOptions}
                           placeholder="Sélectionner..."
                           styles={customSelectStyles}
                           isClearable
+                          noOptionsMessage={() => 'Aucun câble disponible'}
                         />
                       ) : (
                         <span className={`text-sm ${record.cable_type ? 'text-gray-800 font-medium' : 'text-gray-400 italic'}`}>

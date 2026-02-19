@@ -1,11 +1,46 @@
-import { Plus, Database, BarChart3, GitBranch, Box, Cable, Upload } from 'lucide-react';
+import { LayoutDashboard, Layers, GitBranch, Cable } from 'lucide-react';
 
+/**
+ * Navigation principale OmniLink — 4 tabs (refonte UX Less is More)
+ * - Points INS : Form + Import + Liste (sub-nav interne)
+ * - Dashboard  : Stats globales
+ * - Schémas    : Loop Diagrams + JB Diagrams (sub-nav interne)
+ * - Câblage    : Carnets de câbles Unité / Local / Multi
+ */
 export const TABS = [
-  { id: 'form', label: 'Nouveau Point', icon: Plus, shortLabel: 'Nouveau' },
-  { id: 'import', label: 'Import Excel', icon: Upload, shortLabel: 'Import' },
-  { id: 'list', label: 'Liste des Points', icon: Database, shortLabel: 'Liste' },
-  { id: 'dashboard', label: 'Dashboard', icon: BarChart3, shortLabel: 'Stats' },
-  { id: 'loop', label: 'Schéma de Boucle', icon: GitBranch, shortLabel: 'Loop' },
-  { id: 'jb', label: 'Schéma JB', icon: Box, shortLabel: 'JB' },
-  { id: 'cables', label: 'Carnet de Câbles', icon: Cable, shortLabel: 'Câbles' },
+  {
+    id: 'points',
+    label: 'Points INS',
+    shortLabel: 'Points',
+    icon: Layers,
+    subTabs: [
+      { id: 'form',   label: 'Nouveau',  shortLabel: 'Nouveau' },
+      { id: 'import', label: 'Import',   shortLabel: 'Import'  },
+      { id: 'list',   label: 'Liste',    shortLabel: 'Liste'   },
+    ],
+  },
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    shortLabel: 'Stats',
+    icon: LayoutDashboard,
+    subTabs: [],
+  },
+  {
+    id: 'schemas',
+    label: 'Schémas',
+    shortLabel: 'Schémas',
+    icon: GitBranch,
+    subTabs: [
+      { id: 'loop', label: 'Schémas de Boucle', shortLabel: 'Boucle' },
+      { id: 'jb',   label: 'Schémas JB',        shortLabel: 'JB'     },
+    ],
+  },
+  {
+    id: 'cables',
+    label: 'Câblage',
+    shortLabel: 'Câbles',
+    icon: Cable,
+    subTabs: [],
+  },
 ];
