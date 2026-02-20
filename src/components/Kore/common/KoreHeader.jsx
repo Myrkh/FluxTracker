@@ -4,8 +4,9 @@
 
 import React from 'react';
 import { LogOut, Home } from 'lucide-react';
+import { NotificationBell } from './NotificationBell';
 
-export function KoreHeader({ user, profile, signOut, docsCount }) {
+export function KoreHeader({ user, profile, signOut, docsCount, notifications, unreadCount, onMarkAllRead, onMarkOneRead }) {
   return (
     <header className="bg-gradient-to-r from-[#003D5C] to-[#005078] shadow-xl">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -52,6 +53,13 @@ export function KoreHeader({ user, profile, signOut, docsCount }) {
                 <span>{profile?.full_name || user.email?.split('@')[0]}</span>
               </div>
             )}
+            {/* Cloche notifications — même ligne que l'user */}
+            <NotificationBell
+              notifications={notifications || []}
+              unreadCount={unreadCount || 0}
+              onMarkAllRead={onMarkAllRead}
+              onMarkOneRead={onMarkOneRead}
+            />
             {user && (
               <button
                 onClick={signOut}

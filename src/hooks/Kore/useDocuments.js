@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase }         from '../../lib/supabase';
 import { hashFile }         from '../../services/Kore/HashService';
 import { prepareDownload }  from '../../services/Kore/PdfStampService';
+import { NotificationService } from '../../services/Kore/NotificationService';
 
 const STORAGE_BUCKET = 'kore-docs';
 
@@ -127,6 +128,18 @@ export function useDocuments(userId) {
 
       if (error) return { error };
 
+      // Récupère le doc depuis l'état local pour NotificationService
+      const docForNotif = docs.find(d => d.id === documentId);
+      const revForNotif = docForNotif?.kore_revisions?.find(r => r.id === revisionId);
+      if (docForNotif && revForNotif) {
+        // Non-bloquant — ne pas await pour ne pas ralentir la signature
+        NotificationService.onDocumentSigned({
+          doc:        docForNotif,
+          revision:   { ...revForNotif, kore_signatures: [...(revForNotif.kore_signatures || []), { role, signed_at: new Date().toISOString() }] },
+          signedRole: role,
+          signerName: fullName,
+        }).catch(err => console.warn('[KORE] NotificationService.onDocumentSigned error:', err));
+      }
       setDocs(prev => prev.map(doc => {
         if (doc.id !== documentId) return doc;
         return {

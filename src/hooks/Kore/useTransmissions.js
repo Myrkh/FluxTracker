@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // KORE — useTransmissions Hook
-// CRUD des bordereaux de transmission BT-x
+// v4 : snapshot complet — signed_at + user_id par rôle
+//      → tampon ZIP identique au tampon Registre
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { useState, useEffect, useCallback } from 'react';
@@ -11,7 +12,6 @@ export function useTransmissions(userId) {
   const [transmissions, setTransmissions] = useState([]);
   const [loading, setLoading]             = useState(true);
 
-  // ── Chargement ──────────────────────────────────────────────────────────
   const load = useCallback(async () => {
     if (!userId) { setTransmissions([]); setLoading(false); return; }
     setLoading(true);
@@ -33,24 +33,20 @@ export function useTransmissions(userId) {
 
   useEffect(() => { load(); }, [load]);
 
-  // ── Prochain numéro BT ──────────────────────────────────────────────────
   const nextBtNumber = useCallback(() => {
-    const seq = transmissions.length + 1;
-    return buildBtNumber(seq);
+    return buildBtNumber(transmissions.length + 1);
   }, [transmissions]);
 
-  // ── Créer un bordereau ──────────────────────────────────────────────────
   const createTransmission = useCallback(async (btData, selectedDocs) => {
     try {
-      // 1. Insérer le bordereau
       const { data: bt, error: btError } = await supabase
         .from('kore_transmissions')
         .insert({
           bt_number:       btData.bt_number,
-          project_number:  btData.project_number || null,
-          recipient_name:  btData.recipient_name || null,
+          project_number:  btData.project_number  || null,
+          recipient_name:  btData.recipient_name  || null,
           recipient_email: btData.recipient_email || null,
-          notes:           btData.notes || null,
+          notes:           btData.notes           || null,
           doc_count:       selectedDocs.length,
           user_id:         userId,
         })
@@ -59,11 +55,17 @@ export function useTransmissions(userId) {
 
       if (btError) throw btError;
 
-      // 2. Insérer les lignes de documents (snapshot au moment de la transmission)
       const docRows = selectedDocs.map(d => {
-        const rev = d.kore_revisions
+        const rev  = d.kore_revisions
           ?.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
         const sigs = rev?.kore_signatures || [];
+
+        // Trouver la signature effective pour un rôle (null si pas encore signée)
+        const sigFor = (role) => sigs.find(s => s.role === role && s.signed_at) || null;
+
+        const sigR = sigFor('REDACTEUR');
+        const sigV = sigFor('VERIFICATEUR');
+        const sigA = sigFor('APPROBATEUR');
 
         return {
           transmission_id:  bt.id,
@@ -72,11 +74,23 @@ export function useTransmissions(userId) {
           doc_title:        d.title,
           revision:         d.current_revision,
           status:           d.current_status,
-          file_hash:        rev?.file_hash    || null,
+          // Intégrité + fichier
+          file_hash:        rev?.file_hash || null,
+          file_path:        rev?.file_path || null,
+          file_name:        rev?.file_name || null,
+          // Noms des signataires (définis dans le doc, indépendants des signatures)
           sig_redacteur:    rev?.redacteur    || null,
           sig_verificateur: rev?.verificateur || null,
           sig_approbateur:  rev?.approbateur  || null,
           sig_count:        sigs.length,
+          // Dates réelles — null si pas encore signé
+          sig_redacteur_signed_at:    sigR?.signed_at || null,
+          sig_verificateur_signed_at: sigV?.signed_at || null,
+          sig_approbateur_signed_at:  sigA?.signed_at || null,
+          // User IDs — null si pas encore signé → clé [SIGNINGKEY] dans tampon
+          sig_redacteur_user_id:    sigR?.user_id || null,
+          sig_verificateur_user_id: sigV?.user_id || null,
+          sig_approbateur_user_id:  sigA?.user_id || null,
         };
       });
 
@@ -86,7 +100,6 @@ export function useTransmissions(userId) {
 
       if (docsError) throw docsError;
 
-      // 3. Mise à jour locale
       const newBt = { ...bt, kore_transmission_docs: docRows };
       setTransmissions(prev => [newBt, ...prev]);
 
