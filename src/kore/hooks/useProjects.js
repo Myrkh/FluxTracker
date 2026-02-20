@@ -44,7 +44,7 @@ export function useProjects(userId) {
     try {
       const { data, error } = await supabase
         .from('kore_project_members')
-        .select('*, profiles(id, full_name, email, avatar_url)')
+        .select('*, profiles!kore_project_members_profiles_fk(id, full_name, email, avatar_url)')
         .eq('project_id', projectId);
 
       if (error) throw error;
@@ -62,28 +62,39 @@ export function useProjects(userId) {
     setActiveProject(project);
     if (project) {
       loadMembers(project.id);
-      // Persister en localStorage pour retrouver le projet au rechargement
       localStorage.setItem('kore_active_project', project.id);
+    } else {
+      // null = retour volontaire à la page Mes projets → effacer le localStorage
+      // sinon le useEffect dans KoreDoc re-sélectionne le projet immédiatement
+      localStorage.removeItem('kore_active_project');
+      setMembers([]);
+      setMyRole(null);
     }
   }, [loadMembers]);
 
   // ── Créer un projet ───────────────────────────────────────────────────
+  // Utilise une fonction SECURITY DEFINER pour contourner les limitations
+  // de RLS sur INSERT...RETURNING * (chicken-and-egg avec kore_project_members)
   const createProject = useCallback(async ({ name, projectNumber, description }) => {
     try {
       const { data, error } = await supabase
-        .from('kore_projects')
-        .insert({ name, project_number: projectNumber, description, created_by: userId })
-        .select()
-        .single();
+        .rpc('kore_create_project', {
+          p_name:        name         || '',
+          p_number:      projectNumber || null,
+          p_description: description   || null,
+        });
 
       if (error) throw error;
+
+      // data est un tableau (SETOF) → prendre le premier élément
+      const project = Array.isArray(data) ? data[0] : data;
       await loadProjects();
-      return { data, error: null };
+      return { data: project, error: null };
     } catch (err) {
       console.error('[KORE] createProject error:', err);
       return { data: null, error: err };
     }
-  }, [userId, loadProjects]);
+  }, [loadProjects]);
 
   // ── Inviter un membre par email ───────────────────────────────────────
   const inviteMember = useCallback(async (projectId, email, role) => {

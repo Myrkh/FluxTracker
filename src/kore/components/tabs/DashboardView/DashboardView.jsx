@@ -5,7 +5,7 @@
 
 import React, { useMemo } from 'react';
 import { BarChart3, Eye, FileText, Layers, CheckCircle2, Paperclip } from 'lucide-react';
-import { DISCIPLINES, STATUTS, STATUTS_EMIS } from '../../../../constants/Kore';
+import { DISCIPLINES, STATUTS, STATUTS_EMIS } from '../../../constants';
 import { StatutBadge } from '../../common/StatutBadge';
 
 export function DashboardView({ docs }) {

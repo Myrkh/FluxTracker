@@ -5,7 +5,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import ExcelJS from 'exceljs';
-import { DISCIPLINES, STATUTS, STATUTS_EMIS } from '../../constants/Kore';
+import { DISCIPLINES, STATUTS, STATUTS_EMIS } from '../constants';
 
 const ARTELIA_NAVY   = '00375A';  // navy Artelia
 const ARTELIA_TEAL   = '009BA4';  // teal KORE

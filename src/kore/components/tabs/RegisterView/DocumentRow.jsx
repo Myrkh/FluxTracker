@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Copy, History, ChevronDown, ChevronRight, Download, FileText, Shield, Lock } from 'lucide-react';
 import { StatutBadge }    from '../../common/StatutBadge';
 import { SignaturePills } from '../../common/SignaturePills';
-import { shortHash, formatFileSize,  } from '../../../../services/Kore';
+import { shortHash, formatFileSize,  } from '../../../services';
 
 export function DocumentRow({ doc, isExpanded, onToggle, onAddRevision, onDownloadWithStamp, onSign }) {
   const [copiedId,    setCopiedId]    = useState(false);

@@ -6,9 +6,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase }          from '../../lib/supabase';
-import { hashFile }          from '../../services/Kore/HashService';
-import { prepareDownload }   from '../../services/Kore/PdfStampService';
-import { NotificationService } from '../../services/Kore/NotificationService';
+import { hashFile }          from '../services/HashService';
+import { prepareDownload }   from '../services/PdfStampService';
+import { NotificationService } from '../services/NotificationService';
 
 const STORAGE_BUCKET = 'kore-docs';
 

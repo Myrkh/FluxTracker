@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { FolderOpen, Plus, FileText, Users, Calendar, ArrowRight, X } from 'lucide-react';
-import { KORE_ROLES } from '../../../constants/Kore/roles';
+import { KORE_ROLES } from '../../constants/roles';
 
 // ── Modale création projet ───────────────────────────────────────────────
 function CreateProjectModal({ onSave, onClose }) {

@@ -6,7 +6,7 @@
 import React, { useState, useMemo } from 'react';
 import { X, Search, FileText, RefreshCw, Download, Send, Check } from 'lucide-react';
 import { StatutBadge } from '../../common/StatutBadge';
-import { generateBordereauPdf } from '../../../../services/Kore/BtxService';
+import { generateBordereauPdf } from '../../../services/BtxService';
 
 export function NewTransmissionModal({ docs, nextBtNumber, onSave, onClose, notify, user, profile }) {
   const [search,       setSearch]       = useState('');

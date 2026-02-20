@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { Users, UserPlus, Crown, Trash2, ChevronDown, Mail, Shield, X } from 'lucide-react';
-import { KORE_ROLES, ROLE_OPTIONS, can } from '../../../constants/Kore/roles';
+import { KORE_ROLES, ROLE_OPTIONS, can } from '../../constants/roles';
 
 // ── Avatar initiales ─────────────────────────────────────────────────────
 function Avatar({ name, size = 'md' }) {

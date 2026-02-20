@@ -7,9 +7,9 @@ import React, { useState } from 'react';
 import { Send, Plus, ChevronDown, ChevronRight, Download, RefreshCw, Archive, Mail } from 'lucide-react';
 import { StatutBadge }          from '../../common/StatutBadge';
 import { NewTransmissionModal } from './NewTransmissionModal';
-import { generateBordereauPdf } from '../../../../services/Kore/BtxService';
-import { generateBtZip }        from '../../../../services/Kore/ZipService';
-import { NotificationService }  from '../../../../services/Kore/NotificationService';
+import { generateBordereauPdf } from '../../../services/BtxService';
+import { generateBtZip }        from '../../../services/ZipService';
+import { NotificationService }  from '../../../services/NotificationService';
 
 // ── Barre de progression ─────────────────────────────────────────────────
 function ZipProgress({ pct, label }) {

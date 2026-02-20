@@ -6,30 +6,30 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { FileText, List, BarChart2, Send, Upload, Users,
-         FolderOpen, RefreshCw } from 'lucide-react';
+         FolderOpen, RefreshCw, LogOut } from 'lucide-react';
 
 // ── Auth (KORE gère lui-même son auth, App.jsx ne passe pas de props) ─────
 import { useAuth }               from '../lib/horizonData';
 import AuthGate                  from '../components/AuthGate';
 
 // ── Hooks data ─────────────────────────────────────────────────────────────
-import { useProjects }           from '../hooks/Kore/useProjects';
-import { useKoreDocuments }      from '../hooks/Kore/useKoreDocuments';
-import { useTransmissions }      from '../hooks/Kore/useTransmissions';
-import { useKoreNotifications }  from '../hooks/Kore/useKoreNotifications';
-import { can }                   from '../constants/Kore/roles';
+import { useProjects }           from '../kore/hooks/useProjects';
+import { useKoreDocuments }      from '../kore/hooks/useKoreDocuments';
+import { useTransmissions }      from '../kore/hooks/useTransmissions';
+import { useKoreNotifications }  from '../kore/hooks/useKoreNotifications';
+import { can }                   from '../kore/constants/roles';
 
 // ── Composants ─────────────────────────────────────────────────────────────
-import { ProjectsView }          from '../components/Kore/tabs/ProjectsView';
-import { NewDocumentForm }       from '../components/Kore/tabs/NewDocumentForm';
-import { RegisterView }          from '../components/Kore/tabs/RegisterView/RegisterView';
-import { DashboardView }         from '../components/Kore/tabs/DashboardView/DashboardView';
-import { TransmissionView }      from '../components/Kore/tabs/TransmissionView/TransmissionView';
-import { ImportView }            from '../components/Kore/tabs/ImportView';
-import { TeamView }              from '../components/Kore/tabs/TeamView';
-import { NotificationBell }      from '../components/Kore/common/NotificationBell';
-import { ProjectSelector }       from '../components/Kore/tabs/ProjectSelector';
-import { Toast }                 from '../components/Kore/common/Toast';
+import { ProjectsView }          from '../kore/components/tabs/ProjectsView';
+import { NewDocumentForm }       from '../kore/components/tabs/NewDocumentForm';
+import { RegisterView }          from '../kore/components/tabs/RegisterView/RegisterView';
+import { DashboardView }         from '../kore/components/tabs/DashboardView/DashboardView';
+import { TransmissionView }      from '../kore/components/tabs/TransmissionView/TransmissionView';
+import { ImportView }            from '../kore/components/tabs/ImportView';
+import { TeamView }              from '../kore/components/tabs/TeamView';
+import { NotificationBell }      from '../kore/components/common/NotificationBell';
+import { ProjectSelector }       from '../kore/components/tabs/ProjectSelector';
+import { Toast }                 from '../kore/components/common/Toast';
 
 // ── Tabs disponibles par rôle ─────────────────────────────────────────────
 const ALL_TABS = [
@@ -159,7 +159,15 @@ export default function KoreDoc() {
               onMarkAllRead={markAllRead}
               onMarkOneRead={markOneRead}
             />
-            <span className="text-sm text-gray-500">{profile?.full_name || user?.email}</span>
+            <span className="text-sm text-gray-500 hidden sm:block">{profile?.full_name || user?.email}</span>
+            <button
+              onClick={signOut}
+              className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors px-2 py-1.5 rounded-lg hover:bg-red-50"
+              title="Déconnexion"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden sm:block">Déconnexion</span>
+            </button>
           </div>
         </header>
 

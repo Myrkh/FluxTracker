@@ -6,9 +6,9 @@
 
 import React, { useState, useRef } from 'react';
 import { X, Upload, FileText, RefreshCw, Trash2 } from 'lucide-react';
-import { STATUTS } from '../../../../constants/Kore';
+import { STATUTS } from '../../../constants';
 import { StatutBadge } from '../../common/StatutBadge';
-import { formatFileSize } from '../../../../services/Kore';
+import { formatFileSize } from '../../../services';
 
 const ACCEPTED_TYPES = '.pdf,.docx,.doc,.xlsx,.xls,.dwg,.dxf,.pptx,.txt';
 const MAX_SIZE_MB    = 50;

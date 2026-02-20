@@ -5,7 +5,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, FolderOpen, Plus, Check } from 'lucide-react';
-import { KORE_ROLES } from '../../../constants/Kore/roles';
+import { KORE_ROLES } from '../../constants/roles';
 
 export function ProjectSelector({ projects, activeProject, onSelect, onCreateNew, myRole }) {
   const [open, setOpen] = useState(false);

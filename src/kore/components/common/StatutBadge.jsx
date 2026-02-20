@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import React from 'react';
-import { STATUT_COLORS, STATUTS } from '../../../constants/Kore';
+import { STATUT_COLORS, STATUTS } from '../../constants';
 
 /**
  * @param {string} code - code statut (PRE, IFR, IFC...)

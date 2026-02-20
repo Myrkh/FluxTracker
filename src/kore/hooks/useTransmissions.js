@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase }      from '../../lib/supabase';
-import { buildBtNumber } from '../../services/Kore/BtxService';
+import { buildBtNumber } from '../services/BtxService';
 
 export function useTransmissions(userId) {
   const [transmissions, setTransmissions] = useState([]);

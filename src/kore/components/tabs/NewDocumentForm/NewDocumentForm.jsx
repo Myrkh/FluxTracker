@@ -9,11 +9,11 @@ import { Plus, RefreshCw, FileText, History, Layers, AlertTriangle, Upload, Tras
 import {
   CENTRES_PROFIT, ANNEES, CODES_DISTINCTIFS,
   DISCIPLINES, STATUTS, SUFFIXES,
-} from '../../../../constants/Kore/';
+} from '../../../constants';
 import {
   buildDocNumber, buildProjectNumber, nextSequence,
   findSimilarDocuments, formatFileSize,
-} from '../../../../services/Kore';
+} from '../../../services';
 import { StatutBadge } from '../../common/StatutBadge';
 
 const ACCEPTED_TYPES = '.pdf,.docx,.doc,.xlsx,.xls,.dwg,.dxf,.pptx,.txt';
